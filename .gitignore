@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.pyc
+detections/*.png
+samples/**/*.png
+samples/**/*.jpg

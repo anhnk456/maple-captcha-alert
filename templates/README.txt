@@ -1,0 +1,1 @@
+Dat cac anh PNG/JPG da cat sat vung CAPTCHA vao thu muc nay.

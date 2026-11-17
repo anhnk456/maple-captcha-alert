@@ -1,0 +1,1 @@
+Anh duoc luu khi detector canh bao se xuat hien trong thu muc nay.

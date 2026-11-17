@@ -1,0 +1,1 @@
+Dat anh chup man hinh co CAPTCHA hoac thong bao can canh bao vao thu muc nay de kiem tra.

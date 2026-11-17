@@ -1,0 +1,1 @@
+Dat anh chup man hinh khong co CAPTCHA vao thu muc nay de kiem tra bao nham.
