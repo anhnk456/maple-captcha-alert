@@ -25,7 +25,7 @@ class Match:
 
 
 class CaptchaDetector:
-    def __init__(self, templates_dir: Path, threshold: float = 0.6) -> None:
+    def __init__(self, templates_dir: Path, threshold: float = 0.8) -> None:
         self.threshold = threshold
         self.templates = self._load_templates(templates_dir)
         if not self.templates:
@@ -39,17 +39,35 @@ class CaptchaDetector:
                 continue
             image = cv2.imread(str(path), cv2.IMREAD_GRAYSCALE)
             if image is not None:
+                if path.stem.endswith(".yellow"):
+                    image = CaptchaDetector._prepare_yellow_text(image)
                 templates.append((path, image))
         return templates
 
+    @staticmethod
+    def _prepare_yellow_text(image: np.ndarray) -> np.ndarray:
+        if image.ndim == 3:
+            hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+            image = cv2.inRange(hsv, (18, 150, 160), (40, 255, 255))
+        # Tolerate small italic and antialiasing differences between text frames.
+        return cv2.GaussianBlur(image, (7, 7), 0)
+
     def match(self, image: np.ndarray) -> Match | None:
         gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) if image.ndim == 3 else image
+        yellow_text: np.ndarray | None = None
         best: Match | None = None
 
         for path, template in self.templates:
             if gray.shape[0] < template.shape[0] or gray.shape[1] < template.shape[1]:
                 continue
-            result = cv2.matchTemplate(gray, template, cv2.TM_CCOEFF_NORMED)
+            if path.stem.endswith(".yellow"):
+                if image.ndim != 3:
+                    continue
+                if yellow_text is None:
+                    yellow_text = self._prepare_yellow_text(image)
+                result = cv2.matchTemplate(yellow_text, template, cv2.TM_CCORR_NORMED)
+            else:
+                result = cv2.matchTemplate(gray, template, cv2.TM_CCOEFF_NORMED)
             confidence = float(result.max())
             if best is None or confidence > best.confidence:
                 best = Match(path, confidence)
@@ -193,7 +211,7 @@ def build_parser() -> argparse.ArgumentParser:
         description="Phat hien mau CAPTCHA tren anh/man hinh va phat canh bao."
     )
     parser.add_argument("--templates", type=Path, default=Path("templates"))
-    parser.add_argument("--threshold", type=float, default=0.6)
+    parser.add_argument("--threshold", type=float, default=0.8)
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     check_parser = subparsers.add_parser("check", help="Kiem tra cac anh co san")

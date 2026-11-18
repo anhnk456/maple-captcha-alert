@@ -1,0 +1,21 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Maple CAPTCHA Alert",
+			"type": "shell",
+			"command": ".\\.venv\\Scripts\\python.exe",
+			"args": [
+				"-u",
+				"main.py",
+				"--threshold",
+				"0.8",
+				"monitor",
+				"--window",
+				"MapleStory"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		}
+	]
+}
