@@ -19,6 +19,7 @@ class CaptchaDetectorTest(unittest.TestCase):
         "elite-boss-curse.png": (304, 215, 808, 267),
         "lie-detector-title.png": (286, 196, 729, 517),
         "lie-detector-activated.png": (197, 238, 355, 299),
+        "lie-detector-shape.png": (330, 226, 596, 458),
     }
 
     def _require_local_samples(self, paths: list[Path]) -> None:
@@ -110,6 +111,33 @@ class CaptchaDetectorTest(unittest.TestCase):
         match = detector.detected(image)
         self.assertIsNotNone(match)
         self.assertEqual(match.template.name, "lie-detector-title.png")
+
+    def test_shape_minigame_ignores_countdown_and_changing_shapes(self) -> None:
+        project_dir = Path(__file__).resolve().parents[1]
+        path = project_dir / "samples" / "captcha" / "lie-detector-shape.png"
+        self._require_local_samples([path])
+        image = cv2.imread(str(path), cv2.IMREAD_COLOR)
+        self.assertIsNotNone(image)
+        detector = CaptchaDetector(project_dir / "templates")
+        original_match = detector.detected(image)
+        self.assertIsNotNone(original_match)
+        self.assertEqual(original_match.template.name, "lie-detector-shape.png")
+        without_dialog = image.copy()
+        without_dialog[226:458, 330:596] = 0
+        self.assertIsNone(detector.detected(without_dialog))
+        image[246:314, 336:589] = 0
+        image[390:450, 378:547] = 0
+
+        for moved in (False, True):
+            with self.subTest(moved=moved):
+                frame = image
+                if moved:
+                    frame = np.zeros((600, 800, 3), dtype=np.uint8)
+                    frame[60:292, 100:366] = image[226:458, 330:596]
+                match = detector.detected(frame)
+                self.assertIsNotNone(match)
+                self.assertEqual(match.template.name, "lie-detector-shape.png")
+                self.assertGreaterEqual(match.confidence, detector.threshold)
 
     def test_activated_message_ignores_countdown_and_click_instructions(self) -> None:
         project_dir = Path(__file__).resolve().parents[1]

@@ -19,7 +19,7 @@ Co the tai ZIP tu GitHub, giai nen roi nhay dup `start.cmd` thay cho lenh clone.
 Lan dau, trinh khoi dong tu tao `.venv` va cai thu vien neu thieu; buoc cai thu
 vien can Internet. Cac lan sau chi can nhay dup `start.cmd`.
 
-Repo da bao gom du 9 anh mau trong `templates`, khong can chep them anh de chay.
+Repo da bao gom du 10 anh mau trong `templates`, khong can chep them anh de chay.
 Khong sao chep `.venv` giua cac may. Anh chup goc trong `samples` va anh canh bao
 trong `detections` chi giu cuc bo vi co the chua thong tin nhan vat/chat;
 chung khong can thiet cho viec giam sat.
@@ -38,7 +38,7 @@ python -m venv .venv
 3. Luu mot hoac nhieu anh PNG vao thu muc `templates`.
 4. Luu anh co mau can canh bao vao `samples/captcha`, anh khong co mau vao `samples/normal`.
 
-Bo template hien tai dung 9 mau duoc tao tu anh nguoi dung cung cap:
+Bo template hien tai dung 10 mau duoc tao tu anh nguoi dung cung cap:
 
 - `capcha1.png`: tieu de LIE DETECTOR cua hop thong bao mini-game.
 - `capcha2.png`: dong chu Lie Detector nghieng, noi tren man hinh.
@@ -51,6 +51,10 @@ Bo template hien tai dung 9 mau duoc tao tu anh nguoi dung cung cap:
 - `lie-detector-title.png`: tieu de LIE DETECTOR co dinh trong anh game thuc te.
   Mau nay khong phu thuoc cau huong dan, day so hay vi tri nam trong mini-game;
   van can tieu de hien thi cung kich thuoc voi template.
+- `lie-detector-shape.png`: phan huong dan co dinh "Move your mouse so that the
+  cursor stays on the shape..." trong mini-game theo doi hinh. Khong lay so dem
+  nguoc, hinh ngoi sao hay ten nhan vat. Mau duoc cat tu anh 608x470 va can cung
+  kich thuoc giao dien de khop; khong tu phong to/thu nho.
 - `lie-detector-activated.png`: hai dong chu vang "Lie Detector" va
   "has been activated." trong thong bao yeu cau bam chuot. Khong lay so dem
   nguoc, so lan bam chuot hay nhan vat; giu nguong khop mac dinh 0.8.
